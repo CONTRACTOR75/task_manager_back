@@ -120,7 +120,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  # URL de ton frontend
+# Autorise ton fichier HTML local
+CORS_ALLOW_ALL_ORIGINS = True  # OK pour le dev local
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
