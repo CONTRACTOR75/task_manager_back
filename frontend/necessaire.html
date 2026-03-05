@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NÉCESSAIRE — To-Do</title>
+  <link rel="icon" href="logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="logo-mark">N/</span>
+      <span class="logo-text">NÉCESSAIRE</span>
+    </div>
+
+    <nav class="filters">
+      <p class="nav-label">AFFICHAGE</p>
+      <button class="filter-btn active" data-filter="all">
+        <span class="btn-icon">◈</span> Toutes <span class="badge" id="badge-all">0</span>
+      </button>
+      <button class="filter-btn" data-filter="in_progress">
+        <span class="btn-icon">◉</span> En cours <span class="badge" id="badge-in_progress">0</span>
+      </button>
+      <button class="filter-btn" data-filter="done">
+        <span class="btn-icon">◎</span> Terminées <span class="badge" id="badge-done">0</span>
+      </button>
+      <button class="filter-btn" data-filter="overdue">
+        <span class="btn-icon">⚠</span> Dépassées <span class="badge" id="badge-overdue">0</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-stats">
+      <p class="nav-label">PROGRESSION</p>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p class="progress-label" id="progressLabel">0 / 0 tâches</p>
+    </div>
+
+    <!-- API CONFIG -->
+    <div class="api-section">
+      <p class="nav-label">API <span id="apiDot" class="api-dot"></span></p>
+      <div class="api-input-wrap">
+        <input type="text" id="apiBase" value="http://localhost:8000/api" placeholder="http://localhost:8000/api" />
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="top-bar">
+      <div class="view-title" id="viewTitle">Toutes les tâches</div>
+      <div class="top-bar-actions">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input type="text" id="searchInput" placeholder="Rechercher…" />
+        </div>
+        <button class="btn-new" id="openTaskModal">+ Nouvelle tâche</button>
+      </div>
+    </header>
+
+    <div class="priority-strip">
+      <button class="prio-chip active" data-prio="all">Tout</button>
+      <button class="prio-chip" data-prio="3">🟢 Basse </button>
+      <button class="prio-chip" data-prio="2">🟡 Moyenne</button>
+      <button class="prio-chip" data-prio="1">🔴 Haute</button>
+    </div>
+
+    <div class="task-board" id="taskBoard">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">✦</div>
+        <p>Aucune tâche pour l'instant.</p>
+        <p class="empty-sub">Appuyez sur <kbd>N</kbd> ou cliquez sur « + Nouvelle tâche ».</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL TÂCHE -->
+  <div class="modal-overlay" id="taskModalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="modalTitle">NOUVELLE TÂCHE</span>
+        <button class="modal-close" id="closeTaskModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label>TITRE <span class="req">*</span></label>
+          <input type="text" id="taskTitle" placeholder="Nom de la tâche…" autocomplete="off" />
+          <span class="field-error" id="titleError"></span>
+        </div>
+        <div class="field">
+          <label>DESCRIPTION</label>
+          <textarea id="taskDesc" placeholder="Détails, notes, contexte…" rows="3"></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>STATUT</label>
+            <select id="taskStatus">
+              <option value="pending">⚪ À débuter</option>
+              <option value="in_progress">🟡 En cours</option>
+              <option value="done">🟢 Terminée</option>
+              <option value="overdue">🔴 Dépassée</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>PRIORITÉ</label>
+            <select id="taskPriority">
+              <option value="3">🔴 Haute</option>
+              <option value="2" selected>🟡 Moyenne</option>
+              <option value="1">🟢 Basse</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>ÉCHÉANCE</label>
+          <input type="datetime-local" id="taskDue" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelTaskModal">Annuler</button>
+        <button class="btn-primary" id="saveTask">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DÉTAIL -->
+  <div class="modal-overlay" id="detailOverlay">
+    <div class="modal modal--detail">
+      <div class="modal-header">
+        <span class="modal-title">DÉTAIL DE LA TÂCHE</span>
+        <button class="modal-close" id="closeDetail">✕</button>
+      </div>
+      <div class="modal-body" id="detailBody"></div>
+      <div class="modal-footer">
+        <button class="btn-ghost btn-danger" id="detailDelete">Supprimer</button>
+        <button class="btn-primary" id="detailEdit">Modifier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
